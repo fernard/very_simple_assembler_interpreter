@@ -1,0 +1,11 @@
+mov c 4
+mov b 0
+mov a 5
+dec a
+inc b
+jnz a -2
+dec c
+mov a b
+jnz c -5
+jnz 0 1
+mov c a
