@@ -1,3 +1,5 @@
+import sys
+
 class BitCalculator:
 
     def __init__(self, bit_size):
@@ -9,8 +11,8 @@ class BitCalculator:
             return sum([int(bit) * (2 ** power)
                         if bit == "0" or bit == "1" else "raise Exception"
                         for power, bit in enumerate(bits[::-1])])
-        except Exception:
-            print("It's not a valid binary")
+        except Exception as e:
+            print("It's not a valid binary %r" % e)
 
     def decimal_to_binary(self, decimal: int):
 
@@ -25,7 +27,11 @@ class BitCalculator:
         if len(result) <= self.bit_size:
             result = "0" * (self.bit_size - len(result)) + result
         else:
-            raise Exception("The register is too short to store such numbers")
+            alert = input("The register is too short to store such numbers. Want to exit? (y/n)")
+            if alert == "y":
+                sys.exit()
+            else:
+                raise BaseException("Exited!")
         return result
 
     def add(self, register:str):

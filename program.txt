@@ -1,6 +1,6 @@
 mov c 4
 mov b 0
-mov a 5
+mov a 13
 dec a
 inc b
 jnz a -2

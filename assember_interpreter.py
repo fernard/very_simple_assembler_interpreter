@@ -25,29 +25,38 @@ class AssemblerInterpreter:
 
             if name == "jnz":
 
-                register = self.registers.get(reg)
-                if register and register != ("0" * self.bit_size):
-                    index += int(val)
-                elif register is None:
-                    if int(reg) != 0:
-                        index += int(val)
+                ''' We consider two scenarios: Either the register's name is present in the dictionary and if
+                    it doesn't equal 0, we jump accordingly in the program. The other option is that the register 
+                    is not in the dictionary, which means it is a constant
+                '''
+                if (
+                    reg in self.registers and self.registers[reg] != ("0" * self.bit_size)
+                    or
+                    reg not in self.registers and int(reg) != 0
+                ):
+
+                    index += int(val) - 1
+
+            elif name == "mov":
+
+                    ''' If the value exists on the dictionary, it means that it is one of the registers
+                        and we assign its value to the current register. Otherwise we set the value of the register
+                        to the number
+                    '''
+
+                    if val in self.registers:
+                        self.registers[reg] = self.registers[val]
                     else:
-                        index += 1
-                else:
-                    index += 1
-            else:
-                index += 1
-                if name == "mov":
-                    try:
                         value = int(val)
                         self.registers[reg] = self.bit_calculator.decimal_to_binary(value)
-                    except:
-                        self.registers[reg] = self.registers[val]
-                elif name == "inc":
+
+            elif name == "inc":
                     self.registers[reg] = self.bit_calculator.add(self.registers[reg])
 
-                elif name == "dec":
+            elif name == "dec":
                     self.registers[reg] = self.bit_calculator.subtract(self.registers[reg])
+
+            index += 1
 
         for k,v in sorted(self.registers.items()):
             print(f'Register {k}: {self.registers[k]}')
